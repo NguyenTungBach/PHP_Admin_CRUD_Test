@@ -65,7 +65,7 @@ class LayoutController extends Controller
         return view('admin.demo.edit',['item' => $data,'portfolios' => Portfolio::all()] );
     }
 
-    public function processEdit(Request $request){
+    public function processEdit(EventRequest $request){
         $id = $request->get('id');
         $event = Event::find($id);
         $event->eventName = $request->get('eventName');

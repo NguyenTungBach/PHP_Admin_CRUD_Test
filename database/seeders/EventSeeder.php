@@ -20,7 +20,7 @@ class EventSeeder extends Seeder
         DB::table('events')->insert([
             [
                 'id' => 1,
-                'eventName' => 'Game Of Award',
+                'eventName' => 'History Game Of Award 2011',
                 'bandNames' => 'A',
                 'startDate' => Carbon::now(),
                 'endDate' => Carbon::now(),
@@ -30,7 +30,7 @@ class EventSeeder extends Seeder
             ],
             [
                 'id' => 2,
-                'eventName' => 'Game Of Award',
+                'eventName' => 'History Game Of Award 2012',
                 'bandNames' => 'B',
                 'startDate' => Carbon::now(),
                 'endDate' => Carbon::now(),
@@ -40,23 +40,33 @@ class EventSeeder extends Seeder
             ],
             [
                 'id' => 3,
-                'eventName' => 'Game Of Award',
+                'eventName' => 'History Game Of Award 2013',
                 'bandNames' => 'C',
                 'startDate' => Carbon::now(),
                 'endDate' => Carbon::now(),
                 'portfolio_id' => 3,
                 'ticketPrice' => 40000,
-                'status' => 1,
+                'status' => 2,
             ],
             [
-                'id' => 5,
-                'eventName' => 'Game Of Award',
+                'id' => 4,
+                'eventName' => 'History Game Of Award 2014',
                 'bandNames' => 'D',
                 'startDate' => Carbon::now(),
                 'endDate' => Carbon::now(),
                 'portfolio_id' => 4,
                 'ticketPrice' => 50000,
-                'status' => 1,
+                'status' => 3,
+            ],
+            [
+                'id' => 5,
+                'eventName' => 'History Game Of Award 2015',
+                'bandNames' => 'E',
+                'startDate' => Carbon::now(),
+                'endDate' => Carbon::now(),
+                'portfolio_id' => 5,
+                'ticketPrice' => 60000,
+                'status' => 0,
             ],
         ]);
         DB::statement('SET FOREIGN_KEY_CHECKS = 1');

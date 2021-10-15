@@ -69,13 +69,16 @@
                                     @switch($item['status'])
                                         @case(1)
                                             <h4>Đang diễn ra</h4>
-                                        @break
+                                            @break
                                         @case(2)
                                             <h4>Sắp diễn ra</h4>
-                                        @break
+                                            @break
                                         @case(3)
                                             <h4>Đã diễn ra</h4>
-                                        @break
+                                            @break
+                                        @case(0)
+                                            <h4>Chờ lần sau</h4>
+                                            @break
                                     @endswitch
                                     </div>
                                 </div>

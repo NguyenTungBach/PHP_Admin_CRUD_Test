@@ -35,16 +35,35 @@
                     <h2 class="panel-title">Create</h2>
                 </header>
                 <div class="panel-body">
+                    @if($errors->all())
+                        <div class="validation-message">
+                            <ul style="display: block;">
+                                @foreach($errors->all() as $error)
+                                    <li>
+                                        <label class="error">
+                                            {{$error}}
+                                        </label>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="row form-group">
                         <div class="col-lg-6">
                             <label>Event Name</label>
                             <input type="text" class="form-control" name="eventName" placeholder="Event Name" value="{{$item['eventName']}}">
+                            @error('eventName')
+                                <label for="eventName" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-6">
                             <label>Band Names</label>
                             <input type="text" class="form-control" name="bandNames" placeholder="Band Names" value="{{$item['bandNames']}}">
+                            @error('bandNames')
+                                <label for="bandNames" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
@@ -54,9 +73,12 @@
 							<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 							</span>
-                                <input name="startDate" type="text" data-plugin-datepicker="" class="form-control" value="{{$item['startDate']}}">
+                                <input name="startDate" type="text" data-plugin-datepicker="" class="form-control" value="{{date("m/d/Y", strtotime($item['startDate']))}}">
                             </div>
                         </div>
+                        @error('startDate')
+                        <label for="startDate" class="error">{{$message}}</label>
+                        @enderror
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-3">
@@ -65,8 +87,11 @@
 							<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 							</span>
-                                <input name="endDate" type="text" data-plugin-datepicker="" class="form-control" value="{{$item['endDate']}}">
+                                <input name="endDate" type="text" data-plugin-datepicker="" class="form-control" value="{{date("m/d/Y", strtotime($item['endDate']))}}">
                             </div>
+                            @error('endDate')
+                                <label for="endDate" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
@@ -77,12 +102,18 @@
                                     <option value="{{$portfolio->id}}" {{$portfolio->id==$item['portfolio_id']?'selected':""}}>{{$portfolio->name}}</option>
                                 @endforeach
                             </select>
+                            @error('portfolio_id')
+                                <label for="portfolio_id" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-4">
                             <label>Ticket Price</label>
                             <input type="number" class="form-control" name="ticketPrice" placeholder="Price" value="{{$item['ticketPrice']}}">
+                            @error('ticketPrice')
+                                <label for="ticketPrice" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
@@ -92,7 +123,11 @@
                                 <option value="1" {{$item['status']==1?'selected':""}}>Đang diễn ra</option>
                                 <option value="2" {{$item['status']==2?'selected':""}}>Sắp diễn ra</option>
                                 <option value="3" {{$item['status']==3?'selected':""}}>Đã diễn ra</option>
+                                <option value="0" {{$item['status']==0?'selected':""}}>Chờ lần sau</option>
                             </select>
+                            @error('status')
+                                <label for="status" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                 </div>

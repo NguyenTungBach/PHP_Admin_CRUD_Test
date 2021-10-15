@@ -75,10 +75,10 @@
 							</span>
                                 <input name="startDate" type="text" data-plugin-datepicker="" class="form-control">
                             </div>
-                            @error('startDate')
-                                <label for="startDate" class="error">{{$message}}</label>
-                            @enderror
                         </div>
+                        @error('startDate')
+                            <label for="startDate" class="error">{{$message}}</label>
+                        @enderror
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-3">
@@ -89,10 +89,10 @@
 							</span>
                                 <input name="endDate" type="text" data-plugin-datepicker="" class="form-control">
                             </div>
-                            @error('endDate')
-                                <label for="endDate" class="error">{{$message}}</label>
-                            @enderror
                         </div>
+                        @error('endDate')
+                            <label for="endDate" class="error">{{$message}}</label>
+                        @enderror
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-3">
@@ -123,6 +123,7 @@
                                 <option value="1" selected="">Đang diễn ra</option>
                                 <option value="2">Sắp diễn ra</option>
                                 <option value="3">Đã diễn ra</option>
+                                <option value="0">Chờ lần sau</option>
                             </select>
                             @error('status')
                                 <label for="status" class="error">{{$message}}</label>

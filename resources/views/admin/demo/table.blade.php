@@ -102,6 +102,9 @@
                                         @break
                                         @case(3)
                                             Đã diễn ra
+                                            @break
+                                        @case(0)
+                                            Chờ lần sau
                                         @break
                                 @endswitch
                                 </td>

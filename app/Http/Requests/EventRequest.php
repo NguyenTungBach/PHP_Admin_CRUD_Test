@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 
 class EventRequest extends FormRequest
 {
@@ -24,13 +25,13 @@ class EventRequest extends FormRequest
     public function rules()
     {
         return [
-            'eventName' => 'required|min:2',
+            'eventName' => 'required|min:20',
             'bandNames' => 'required',
             'startDate' => 'required',
             'endDate' => 'required',
 //            'portfolio' => 'required',
-            'ticketPrice' => 'required',
-//            'status' => 'required',
+            'ticketPrice' => 'required|numeric|not_in:0',
+            'status' => 'required|integer|min:0|max:3',
         ];
     }
 
@@ -38,12 +39,13 @@ class EventRequest extends FormRequest
     {
         return [
             'eventName.required' => 'Please enter eventName',
-            'eventName.min' => 'eventName must at least 2 character',
+            'eventName.min' => 'eventName must at least 20 character',
             'bandNames.required' => 'Please enter bandNames',
             'startDate.required' => 'Please enter startDate',
             'endDate.required' => 'Please enter endDate',
 //            'portfolio.required' => 'Please enter portfolio',
             'ticketPrice.required' => 'Please enter ticketPrice',
+            'ticketPrice.not_in' => 'Please enter not in 0',
 //            'status.required' => 'Please enter status',
         ];
     }
@@ -52,8 +54,17 @@ class EventRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            $startDate = $this->get('startDate');
+            $endDate = $this->get('endDate');
+
             if($this->get('eventName') == 'AK'){
                 $validator->errors()->add('eventName', 'Event không chơi với AK.');
+            }
+            if(date("d/m/Y", strtotime($startDate)) < date("d/m/Y", strtotime(Carbon::now()))){ // startDate phải sau ngày hiện tại
+                $validator->errors()->add('startDate', "Start date must after current date");
+            }
+            if($endDate < $startDate ){ // endDate phải sau phải sau ngày start
+                $validator->errors()->add('endDate', "End date must after startDate");
             }
         });
     }
