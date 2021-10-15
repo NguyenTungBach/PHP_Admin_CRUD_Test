@@ -35,16 +35,35 @@
                     <h2 class="panel-title">Create</h2>
                 </header>
                 <div class="panel-body">
+                    @if($errors->all())
+                        <div class="validation-message">
+                            <ul style="display: block;">
+                                @foreach($errors->all() as $error)
+                                    <li>
+                                        <label class="error">
+                                            {{$error}}
+                                        </label>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="row form-group">
                         <div class="col-lg-6">
                             <label>Event Name</label>
                             <input type="text" class="form-control" name="eventName" placeholder="Event Name">
+                            @error('eventName')
+                                <label for="eventName" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-6">
                             <label>Band Names</label>
                             <input type="text" class="form-control" name="bandNames" placeholder="Band Names">
+                            @error('bandNames')
+                                <label for="bandNames" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
@@ -56,6 +75,9 @@
 							</span>
                                 <input name="startDate" type="text" data-plugin-datepicker="" class="form-control">
                             </div>
+                            @error('startDate')
+                                <label for="startDate" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
@@ -67,23 +89,31 @@
 							</span>
                                 <input name="endDate" type="text" data-plugin-datepicker="" class="form-control">
                             </div>
+                            @error('endDate')
+                                <label for="endDate" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-3">
                             <label>Portfolio</label>
-                            <select class="form-control" name="portfolio">
-                                <option value="Coca" selected="">Coca</option>
-                                <option value="Pepsi">Pepsi</option>
-                                <option value="DC">DC</option>
-                                <option value="Mavel">Mavel</option>
+                            <select class="form-control" name="portfolio_id">
+                                @foreach($portfolios as $portfolio)
+                                    <option value="{{$portfolio->id}}">{{$portfolio->name}}</option>
+                                @endforeach
                             </select>
+                            @error('portfolio_id')
+                                <label for="portfolio_id" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-4">
                             <label>Ticket Price</label>
                             <input type="number" class="form-control" name="ticketPrice" placeholder="Price">
+                            @error('ticketPrice')
+                                <label for="ticketPrice" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                     <div class="row form-group">
@@ -94,6 +124,9 @@
                                 <option value="2">Sắp diễn ra</option>
                                 <option value="3">Đã diễn ra</option>
                             </select>
+                            @error('status')
+                                <label for="status" class="error">{{$message}}</label>
+                            @enderror
                         </div>
                     </div>
                 </div>

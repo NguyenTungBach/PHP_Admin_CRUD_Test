@@ -19,7 +19,7 @@ class CreateEventsTable extends Migration
             $table->string('bandNames');
             $table->date('startDate');
             $table->date('endDate');
-            $table->string('portfolio');
+            $table->unsignedBigInteger('portfolio_id');
             $table->double('ticketPrice');
             $table->integer('status');
         });

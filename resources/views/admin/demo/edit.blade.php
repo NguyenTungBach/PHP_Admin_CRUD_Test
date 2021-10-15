@@ -25,7 +25,7 @@
 
 @section('content')
     <div class="col-md-12">
-        <form name="register-form" action="/edit?id={{$id}}" method="post">
+        <form name="register-form" action="/edit?id={{$item['id']}}" method="post">
             @csrf
             <section class="panel">
                 <header class="panel-heading">
@@ -38,13 +38,13 @@
                     <div class="row form-group">
                         <div class="col-lg-6">
                             <label>Event Name</label>
-                            <input type="text" class="form-control" name="eventName" placeholder="Event Name" value="{{$eventName}}">
+                            <input type="text" class="form-control" name="eventName" placeholder="Event Name" value="{{$item['eventName']}}">
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-6">
                             <label>Band Names</label>
-                            <input type="text" class="form-control" name="bandNames" placeholder="Band Names" value="{{$bandNames}}">
+                            <input type="text" class="form-control" name="bandNames" placeholder="Band Names" value="{{$item['bandNames']}}">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -54,7 +54,7 @@
 							<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 							</span>
-                                <input name="startDate" type="text" data-plugin-datepicker="" class="form-control" value="{{$startDate}}">
+                                <input name="startDate" type="text" data-plugin-datepicker="" class="form-control" value="{{$item['startDate']}}">
                             </div>
                         </div>
                     </div>
@@ -65,34 +65,33 @@
 							<span class="input-group-addon">
 							<i class="fa fa-calendar"></i>
 							</span>
-                                <input name="endDate" type="text" data-plugin-datepicker="" class="form-control" value="{{$endDate}}">
+                                <input name="endDate" type="text" data-plugin-datepicker="" class="form-control" value="{{$item['endDate']}}">
                             </div>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-3">
                             <label>Portfolio</label>
-                            <select class="form-control" name="portfolio">
-                                <option value="Coca" {{$portfolio=="Coca"?'selected':""}}>Coca</option>
-                                <option value="Pepsi" {{$portfolio=="Pepsi"?'selected':""}}>Pepsi</option>
-                                <option value="DC" {{$portfolio=="DC"?'selected':""}}>DC</option>
-                                <option value="Mavel" {{$portfolio=="Mavel"?'selected':""}}>Mavel</option>
+                            <select class="form-control" name="portfolio_id">
+                                @foreach($portfolios as $portfolio)
+                                    <option value="{{$portfolio->id}}" {{$portfolio->id==$item['portfolio_id']?'selected':""}}>{{$portfolio->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-4">
                             <label>Ticket Price</label>
-                            <input type="number" class="form-control" name="ticketPrice" placeholder="Price" value="{{$ticketPrice}}">
+                            <input type="number" class="form-control" name="ticketPrice" placeholder="Price" value="{{$item['ticketPrice']}}">
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-3">
                             <label>Status</label>
                             <select class="form-control" name="status">
-                                <option value="1" {{$status=="1"?'selected':""}}>Đang diễn ra</option>
-                                <option value="2" {{$status=="2"?'selected':""}}>Sắp diễn ra</option>
-                                <option value="3" {{$status=="3"?'selected':""}}>Đã diễn ra</option>
+                                <option value="1" {{$item['status']==1?'selected':""}}>Đang diễn ra</option>
+                                <option value="2" {{$item['status']==2?'selected':""}}>Sắp diễn ra</option>
+                                <option value="3" {{$item['status']==3?'selected':""}}>Đã diễn ra</option>
                             </select>
                         </div>
                     </div>

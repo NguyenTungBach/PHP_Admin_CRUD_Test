@@ -86,7 +86,11 @@
                                 <td >{{$item['bandNames']}}</td>
                                 <td>{{date("d/m/Y", strtotime($item['startDate']))}}</td>
                                 <td>{{date("d/m/Y", strtotime($item['endDate']))}}</td>
-                                <td>{{$item['portfolio']}}</td>
+                                <td>
+                                    @foreach($portfolios as $portfolio)
+                                        {{$item->portfolio_id==$portfolio->id?$portfolio->name:""}}
+                                    @endforeach
+                                </td>
                                 <td>{{number_format($item['ticketPrice'])}}</td>
                                 <td>
                                 @switch($item['status'])

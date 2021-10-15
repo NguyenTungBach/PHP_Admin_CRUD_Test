@@ -2,7 +2,9 @@
 
 
 namespace App\Http\Controllers;
+use App\Http\Requests\EventRequest;
 use App\Models\Event;
+use App\Models\Portfolio;
 use Illuminate\Http\Request;
 
 class LayoutController extends Controller
@@ -12,16 +14,16 @@ class LayoutController extends Controller
     }
 
     public function getForm(){
-        return view('admin.demo.form');
+        return view('admin.demo.form',['portfolios' => Portfolio::all()]);
     }
 
-    public function processForm(Request $request){
+    public function processForm(EventRequest $request){
         $event =new Event();
         $event->eventName = $request->get('eventName');
         $event->bandNames = $request->get('bandNames');
         $event->startDate = date('Y-m-d',strtotime($request->get('startDate')));
         $event->endDate = date("Y-m-d", strtotime($request->get('endDate')));
-        $event->portfolio = $request->get('portfolio');
+        $event->portfolio_id = $request->get('portfolio_id');
         $event->ticketPrice = $request->get('ticketPrice');
         $event->status = $request->get('status');
         $event->save();
@@ -30,8 +32,7 @@ class LayoutController extends Controller
     }
 
     public function getTable(){
-        $data = Event::all();
-        return view('admin.demo.table',['items'=>$data]);
+        return view('admin.demo.table',['items'=>Event::all(),'portfolios' => Portfolio::all()]);
     }
 
     public function getDetail(Request $request){
@@ -42,11 +43,11 @@ class LayoutController extends Controller
             'bandNames' =>Event::where('id','=',$id)->value('bandNames'),
             'startDate' =>Event::where('id','=',$id)->value('startDate'),
             'endDate' =>Event::where('id','=',$id)->value('endDate'),
-            'portfolio' =>Event::where('id','=',$id)->value('portfolio'),
+            'portfolio_id' =>Event::where('id','=',$id)->value('portfolio_id'),
             'ticketPrice' =>Event::where('id','=',$id)->value('ticketPrice'),
             'status' =>Event::where('id','=',$id)->value('status')
         ];
-        return view('admin.demo.detail',$data);
+        return view('admin.demo.detail',['item' =>$data,'portfolios' => Portfolio::all()]);
     }
 
     public function getEdit(Request $request){
@@ -57,11 +58,11 @@ class LayoutController extends Controller
             'bandNames' =>Event::where('id','=',$id)->value('bandNames'),
             'startDate' =>Event::where('id','=',$id)->value('startDate'),
             'endDate' =>Event::where('id','=',$id)->value('endDate'),
-            'portfolio' =>Event::where('id','=',$id)->value('portfolio'),
+            'portfolio_id' =>Event::where('id','=',$id)->value('portfolio_id'),
             'ticketPrice' =>Event::where('id','=',$id)->value('ticketPrice'),
             'status' =>Event::where('id','=',$id)->value('status')
         ];
-        return view('admin.demo.edit',$data);
+        return view('admin.demo.edit',['item' => $data,'portfolios' => Portfolio::all()] );
     }
 
     public function processEdit(Request $request){
@@ -71,7 +72,7 @@ class LayoutController extends Controller
         $event->bandNames = $request->get('bandNames');
         $event->startDate = date('Y-m-d',strtotime($request->get('startDate')));
         $event->endDate = date("Y-m-d", strtotime($request->get('endDate')));
-        $event->portfolio = $request->get('portfolio');
+        $event->portfolio_id = $request->get('portfolio_id');
         $event->ticketPrice = $request->get('ticketPrice');
         $event->status = $request->get('status');
         $event->save();

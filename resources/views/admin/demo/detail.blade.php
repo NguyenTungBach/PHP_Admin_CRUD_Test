@@ -38,31 +38,35 @@
                                 <div>
                                     <div class="col-md-12 mb-lg">
                                         <label>Event Name:</label>
-                                        <h4>{{$eventName}}</h4>
+                                        <h4>{{$item['eventName']}}</h4>
                                     </div>
                                     <div class="col-md-12 mb-lg">
                                         <label>Band Names:</label>
-                                        <h4>{{$bandNames}}</h4>
+                                        <h4>{{$item['bandNames']}}</h4>
                                     </div>
                                     <div class="col-md-12 mb-lg">
                                         <label>Start Date:</label>
-                                        <h4>{{date("d/m/Y", strtotime($startDate))}}</h4>
+                                        <h4>{{date("d/m/Y", strtotime($item['startDate']))}}</h4>
                                     </div>
                                     <div class="col-md-12 mb-lg">
                                         <label>End Date:</label>
-                                        <h4>{{date("d/m/Y", strtotime($endDate))}}</h4>
+                                        <h4>{{date("d/m/Y", strtotime($item['endDate']))}}</h4>
                                     </div>
                                     <div class="col-md-12 mb-lg">
                                         <label>Portfolio:</label>
-                                        <h4>{{$portfolio}}</h4>
+                                        <h4>
+                                            @foreach($portfolios as $portfolio)
+                                              {{$portfolio->id==$item['portfolio_id']? $portfolio->name:""}}
+                                            @endforeach
+                                        </h4>
                                     </div>
                                     <div class="col-md-12 mb-lg">
                                         <label>ticketPrice :</label>
-                                        <h4>{{number_format($ticketPrice)}}</h4>
+                                        <h4>{{number_format($item['ticketPrice'])}}</h4>
                                     </div>
                                     <div class="col-md-12 mb-lg">
                                         <label>Status :</label>
-                                    @switch($status)
+                                    @switch($item['status'])
                                         @case(1)
                                             <h4>Đang diễn ra</h4>
                                         @break
@@ -84,7 +88,7 @@
     </div>
     <footer class="panel-footer">
         <a href="/table"><button class="btn btn-danger">Back to list</button></a>
-        <a href="/edit?id={{$id}}"><button class="btn btn-primary">Edit</button></a>
-        <a href="/delete?id={{$id}}"><button class="btn btn-primary">Delete</button></a>
+        <a href="/edit?id={{$item['id']}}"><button class="btn btn-primary">Edit</button></a>
+        <a href="/delete?id={{$item['id']}}"><button class="btn btn-primary">Delete</button></a>
     </footer>
 @endsection
