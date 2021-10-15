@@ -18,66 +18,44 @@ class LayoutController extends Controller
     }
 
     public function processForm(EventRequest $request){
-        $event =new Event();
-        $event->eventName = $request->get('eventName');
-        $event->bandNames = $request->get('bandNames');
+        $event =new Event($request->all());
         $event->startDate = date('Y-m-d',strtotime($request->get('startDate')));
         $event->endDate = date("Y-m-d", strtotime($request->get('endDate')));
-        $event->portfolio_id = $request->get('portfolio_id');
-        $event->ticketPrice = $request->get('ticketPrice');
-        $event->status = $request->get('status');
         $event->save();
-        $LayoutController = new LayoutController();
-        return $LayoutController->getTable();
+        return redirect('/table');
     }
 
     public function getTable(){
-        return view('admin.demo.table',['items'=>Event::all(),'portfolios' => Portfolio::all()]);
+        return view('admin.demo.table',['items'=>Event::where('status','!=',-1)->get(),'portfolios' => Portfolio::all()]);
     }
 
     public function getDetail(Request $request){
         $id = $request->get('id');
-        $data =[
-            'id' =>Event::where('id','=',$id)->value('id'),
-            'eventName' =>Event::where('id','=',$id)->value('eventName'),
-            'bandNames' =>Event::where('id','=',$id)->value('bandNames'),
-            'startDate' =>Event::where('id','=',$id)->value('startDate'),
-            'endDate' =>Event::where('id','=',$id)->value('endDate'),
-            'portfolio_id' =>Event::where('id','=',$id)->value('portfolio_id'),
-            'ticketPrice' =>Event::where('id','=',$id)->value('ticketPrice'),
-            'status' =>Event::where('id','=',$id)->value('status')
-        ];
-        return view('admin.demo.detail',['item' =>$data,'portfolios' => Portfolio::all()]);
+        return view('admin.demo.detail',['item' =>Event::find($id),'portfolios' => Portfolio::all()]);
     }
 
     public function getEdit(Request $request){
         $id = $request->get('id');
-        $data =[
-            'id' =>Event::where('id','=',$id)->value('id'),
-            'eventName' =>Event::where('id','=',$id)->value('eventName'),
-            'bandNames' =>Event::where('id','=',$id)->value('bandNames'),
-            'startDate' =>Event::where('id','=',$id)->value('startDate'),
-            'endDate' =>Event::where('id','=',$id)->value('endDate'),
-            'portfolio_id' =>Event::where('id','=',$id)->value('portfolio_id'),
-            'ticketPrice' =>Event::where('id','=',$id)->value('ticketPrice'),
-            'status' =>Event::where('id','=',$id)->value('status')
-        ];
-        return view('admin.demo.edit',['item' => $data,'portfolios' => Portfolio::all()] );
+        return view('admin.demo.edit',['item' => Event::find($id),'portfolios' => Portfolio::all()] );
     }
 
     public function processEdit(EventRequest $request){
+        $request->request->remove('_token');
         $id = $request->get('id');
-        $event = Event::find($id);
-        $event->eventName = $request->get('eventName');
-        $event->bandNames = $request->get('bandNames');
-        $event->startDate = date('Y-m-d',strtotime($request->get('startDate')));
-        $event->endDate = date("Y-m-d", strtotime($request->get('endDate')));
-        $event->portfolio_id = $request->get('portfolio_id');
-        $event->ticketPrice = $request->get('ticketPrice');
-        $event->status = $request->get('status');
-        $event->save();
-        $LayoutController = new LayoutController();
-        return $LayoutController->getTable();
+        $event= Event::find($id);
+        $request->request->add([
+            'startDate' => date('Y-m-d',strtotime($request->get('startDate'))),
+            'endDate' => date('Y-m-d',strtotime($request->get('endDate')))
+        ]);
+        $event->update($request->all());
+//        $event = Event::find($id);
+//        $event->eventName = $request->get('eventName');
+//        $event->bandNames = $request->get('bandNames');
+//        $event->portfolio_id = $request->get('portfolio_id');
+//        $event->ticketPrice = $request->get('ticketPrice');
+//        $event->status = $request->get('status');
+//        $event->save();
+        return redirect('/table');
     }
 
     public function getDelete(Request $request){
@@ -94,7 +72,6 @@ class LayoutController extends Controller
         $id = $request->get('id');
         $event = Event::find($id);
         $event->delete();
-        $LayoutController = new LayoutController();
-        return $LayoutController->getTable();
+        return redirect('/table');
     }
 }

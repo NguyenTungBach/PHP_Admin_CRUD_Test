@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     public $timestamps = false;
+    protected $fillable = ['eventName', 'bandNames', 'startDate', 'endDate', 'portfolio_id', 'ticketPrice','status'];
     use HasFactory;
 }
