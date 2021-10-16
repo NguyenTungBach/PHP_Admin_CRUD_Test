@@ -73,6 +73,6 @@ class LayoutController extends Controller
         $id = $request->get('id');
         $event = Event::find($id);
         $event->delete();
-        return redirect('/table');
+        return redirect('/table')->with('success',"Delete hard with ID= $id, Success");
     }
 }
