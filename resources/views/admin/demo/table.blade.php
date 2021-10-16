@@ -27,6 +27,13 @@
     <div class="col-md-12">
         <section class="panel">
             <header class="panel-heading">
+                @if(session('success'))
+                    <div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <strong>{{ session('success') }}</strong>
+                    </div>
+                @endif
+
                 <form action="#" method="get" name ='searchForm'>
                     <div class="row">
                         <div class="col-sm-12 col-md-5">

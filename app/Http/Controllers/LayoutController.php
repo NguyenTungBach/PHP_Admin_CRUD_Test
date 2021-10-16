@@ -18,11 +18,12 @@ class LayoutController extends Controller
     }
 
     public function processForm(EventRequest $request){
+        $eventName = $request->get('eventName');
         $event =new Event($request->all());
         $event->startDate = date('Y-m-d',strtotime($request->get('startDate')));
         $event->endDate = date("Y-m-d", strtotime($request->get('endDate')));
         $event->save();
-        return redirect('/table');
+        return redirect('/table')->with('success',"Create new Event name = $eventName, Success");
     }
 
     public function getTable(){
@@ -55,7 +56,7 @@ class LayoutController extends Controller
 //        $event->ticketPrice = $request->get('ticketPrice');
 //        $event->status = $request->get('status');
 //        $event->save();
-        return redirect('/table');
+        return redirect('/table')->with('success',"Update with ID= $id, Success");
     }
 
     public function getDelete(Request $request){
