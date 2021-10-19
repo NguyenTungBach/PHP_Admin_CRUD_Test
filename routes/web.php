@@ -20,6 +20,7 @@ use App\Http\Controllers\LayoutController;
 Route::get('/', [LayoutController::class, 'getLayout']);
 Route::get('/form', [LayoutController::class, 'getForm']);
 Route::get('/table', [LayoutController::class, 'getTable']);
+Route::get('/search', [LayoutController::class, 'search']);
 Route::get('/detail', [LayoutController::class, 'getDetail']);
 Route::get('/edit', [LayoutController::class, 'getEdit']);
 Route::get('/delete', [LayoutController::class, 'getDelete']);

@@ -26,7 +26,7 @@ class EventFactory extends Factory
             'bandNames' => $this->faker->name(),
             'startDate' => $this->faker->dateTime(),
             'endDate' => $this->faker->dateTime(),
-            'portfolio' => $this->faker->name(),
+            'portfolio_id' => rand(1, 5),
             'ticketPrice' => rand(100000, 1000000),
             'status' => rand(1, 3),
         ];

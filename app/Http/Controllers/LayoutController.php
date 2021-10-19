@@ -27,7 +27,59 @@ class LayoutController extends Controller
     }
 
     public function getTable(){
-        return view('admin.demo.table',['items'=>Event::where('status','!=',-1)->get(),'portfolios' => Portfolio::all()]);
+        $totalItem = Event::all();
+        $limit = 5;
+        return view('admin.demo.table',['totalItem' =>$totalItem,
+            'limit'=> $limit,
+            'items'=>Event::where('status','!=',-1)->paginate($limit),
+            'portfolios' => Portfolio::all()
+        ]);
+    }
+
+    public function search(Request $request){
+        $search = $request->get('keyword');
+        $portfolio_id = $request->get('portfolio_id');
+        $limit = 5;
+        $sort = $request->get('sort');
+        switch ($sort) {
+            case "nameAsc":
+                $typeSort = 'asc';
+                $column = 'eventName';
+                break;
+            case "nameDesc":
+                $typeSort = 'Desc';
+                $column = 'eventName';
+                break;
+            case "priceAsc":
+                $typeSort = 'asc';
+                $column = 'ticketPrice';
+                break;
+            case "priceDesc":
+                $typeSort = 'desc';
+                $column = 'ticketPrice';
+                break;
+        }
+        $totalItem = Event::all();
+        $event = Event::where('status','!=',-1);
+        if (isset($search)){
+            $event->where('eventName','like','%'.$search.'%')
+                ->orWhere('bandNames','like', '%'.$search.'%');
+        }
+        if (isset($portfolio_id)){
+            $event->where('portfolio_id','=', $portfolio_id);
+        }
+        if (isset($typeSort) && isset($column)){
+                $event->orderBy($column, $typeSort);
+        }
+        $events= $event->paginate($limit)->appends($request->all());
+        return view('admin.demo.table',['totalItem' =>$totalItem,
+            'limit'=> $limit,
+            'items'=> $events,
+            'portfolios' => Portfolio::all(),
+            'sort' => $sort,
+            'keywordHasQuery' => $search,
+            'portfolioHasQuery' => $portfolio_id,
+        ]);
     }
 
     public function getDetail(Request $request){

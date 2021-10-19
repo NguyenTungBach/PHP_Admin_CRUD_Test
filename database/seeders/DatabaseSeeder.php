@@ -16,10 +16,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 //        DB::table('events')->delete();
-//        Event::factory()->count(10)->create();
+        Event::factory()->count(40)->create();
         $this->call([
             PortfoliosSeeder::class,
-            EventSeeder::class,
+//            EventSeeder::class,
         ]);
     }
 }

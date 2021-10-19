@@ -33,26 +33,51 @@
                         <strong>{{ session('success') }}</strong>
                     </div>
                 @endif
-
-                <form action="#" method="get" name ='searchForm'>
+                <form action="/search" method="get" name ='searchForm'>
+                    @csrf
                     <div class="row">
-                        <div class="col-sm-12 col-md-5">
+                        <div class="col-sm-12 col-md-3">
                             <div class="form-group">
-                                <label>Search</label>
-                                <select id="company" class="form-control" name="category" required="">
+                                <label>Portfolio</label>
+                                <select id="company" class="form-control" name="portfolio_id" required="">
                                     <option value="0" selected disabled>--All--</option>
-                                    <option > SomeThing</option>
+                                    @foreach($portfolios as $portfolio)
+                                        <option value="{{$portfolio->id}}" {{isset($portfolioHasQuery) && $portfolio->id==$portfolioHasQuery  ? 'selected':""}}>{{$portfolio->name}}</option>
+                                    @endforeach
                                 </select>
                                 <label class="error" for="company"></label>
                             </div>
-
                         </div>
-                        <div class="col-sm-12 col-md-2">
+                        <div class="col-sm-12 col-md-4">
+                            <div class="form-group">
+                                <label>Sort</label>
+                                <select id="company" class="form-control" name="sort" required="">
+                                    <option value="0" selected disabled>--All--</option>
+                                    <option value="nameAsc" {{isset($sort) && $sort == 'nameAsc'? 'selected' : ''}}>
+                                        Sort by name a-z
+                                    </option>
+                                    <option
+                                        value="nameDesc" {{isset($sort) && $sort == 'nameDesc'? 'selected' : ''}}>
+                                        Sort by name z-a
+                                    </option>
+                                    <option
+                                        value="priceAsc" {{isset($sort) && $sort == 'priceAsc'? 'selected' : ''}}>
+                                        Sort by price low to height
+                                    </option>
+                                    <option
+                                        value="priceDesc" {{isset($sort) && $sort == 'priceDesc'? 'selected' : ''}}>
+                                        Sort by price height to low
+                                    </option>
+                                </select>
+                                <label class="error" for="company"></label>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-5">
                         </div>
                         <div class="col-sm-12 col-md-5">
                             <label>Search</label>
                             <div class="input-group input-search">
-                                <input type="text" class="form-control" name="keyword" placeholder="Search...">
+                                <input type="text" class="form-control" name="keyword" placeholder="Search..." value="{{$keywordHasQuery??""}}">
                                 <span class="input-group-btn">
 								<button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
 							</span>
@@ -128,53 +153,65 @@
                 <div class="row datatables-footer">
                     <div class="col-sm-12 col-md-6">
                         <div class="dataTables_info" id="datatable-editable_info" role="status" aria-live="polite">
-                            Showing 1 to 5 of 500 product, total page 300
+                            Showing {{($items->currentPage() -1)* $limit + 1}} to {{($items->currentPage() -1)* $limit + $limit }} of {{$totalItem->count()}} item, total page {{$items->lastPage()}}
                         </div>
                     </div><div class="col-sm-12 col-md-6">
                         <div class="dataTables_paginate paging_bs_normal" id="datatable-editable_paginate">
-                            <ul class="pagination">
-                                <li>
-                                    <a href="1" class="page-link">
-                                        First
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<%= parseInt(page) - 1%>" class="page-link">
+                            @php
+                                $link_limit = 7;
+                            @endphp
+                            @if($items->lastPage() >1)
+                                <ul class="pagination">
+{{--                                    chỉ hiển thị khi lớn hơn 1--}}
+                                    @if($items->currentPage()>1)
+                                        <li>
+                                            <a href="{{$items->url(1)}}" class="page-link">
+                                                First
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{$items->url($items->currentPage()-1)}}" class="page-link">
                                         <span class="fa fa-chevron-left">
                                         </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<%= parseInt(page) - 2%>" class="page-link">1</a>
-                                </li>
-                                <li>
-                                    <a href="<%= parseInt(page) - 1%>" class="page-link">2</a>
-                                </li>
-
-                                <li class="active">
-                                    <a href="#">3</a>
-                                </li>
-
-                                <li>
-                                    <a href="<%= parseInt(page) + 1%>" class="page-link">4</a>
-                                </li>
-
-                                <li>
-                                    <a href="<%= parseInt(page) + 2%>" class="page-link">5</a>
-                                </li>
-
-                                <li>
-                                    <a href="<%= parseInt(page) + 1%>" class="page-link">
+                                            </a>
+                                        </li>
+                                    @endif
+                                    @for($i = 1;$i<= $items->lastPage(); $i++ )
+                                        @php
+                                            if(isset($link_limit) && isset($items)){
+                                                $half_total_links = floor($link_limit / 2);
+                                                $from = $items->currentPage() - $half_total_links;
+                                                $to = $items->currentPage() + $half_total_links;
+                                                if ($items->currentPage() < $half_total_links) {
+                                                $to += $half_total_links - $items->currentPage();
+                                                }
+                                                if ($items->lastPage() - $items->currentPage() < $half_total_links) {
+                                                $from -= $half_total_links - ($items->lastPage() - $items->currentPage()) - 1;
+                                                }
+                                            }
+                                        @endphp
+                                        @if ($from < $i && $i<$to)
+                                            <li class="{{$items->currentPage() ==$i ? 'active' : ''}}">
+                                                <a href="{{$items->url($i)}}" class="page-link">{{$i}}</a>
+                                            </li>
+                                        @endif
+                                    @endfor
+{{--                                    chỉ hiển thị khi currentPage < lastPage--}}
+                                    @if($items->currentPage() < $items->lastPage())
+                                        <li>
+                                            <a href="{{ $items->url($items->currentPage() + 1) }}" class="page-link">
                                         <span class="fa fa-chevron-right">
                                         </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<%= totalPage%>" class="page-link">
-                                        Last
-                                    </a>
-                                </li>
-                            </ul>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ $items->url($items->lastPage()) }}" class="page-link">
+                                                Last
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            @endif
                         </div>
                     </div>
                 </div>
