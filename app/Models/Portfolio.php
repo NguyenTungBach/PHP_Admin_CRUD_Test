@@ -9,4 +9,9 @@ class Portfolio extends Model
 {
     public $timestamps = false;
     use HasFactory;
+
+    public function events()
+    {
+        return $this->hasMany(Event::class,'portfolio_id','id');
+    }
 }

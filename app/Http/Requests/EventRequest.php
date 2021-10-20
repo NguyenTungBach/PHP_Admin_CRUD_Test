@@ -31,6 +31,7 @@ class EventRequest extends FormRequest
             'endDate' => 'required',
 //            'portfolio' => 'required',
             'ticketPrice' => 'required|numeric|not_in:0',
+            'thumbnail' => 'required|url',
             'status' => 'required|integer|min:0|max:3',
         ];
     }
@@ -46,6 +47,8 @@ class EventRequest extends FormRequest
 //            'portfolio.required' => 'Please enter portfolio',
             'ticketPrice.required' => 'Please enter ticketPrice',
             'ticketPrice.not_in' => 'Please enter not in 0',
+            'thumbnail.required' => 'Please chose thumbnail',
+            'thumbnail.url' => 'Thumbnail must url',
 //            'status.required' => 'Please enter status',
         ];
     }

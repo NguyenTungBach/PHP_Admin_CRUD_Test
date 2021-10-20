@@ -17,6 +17,7 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->text('eventName');
             $table->string('bandNames');
+            $table->text('thumbnail');
             $table->date('startDate');
             $table->date('endDate');
             $table->unsignedBigInteger('portfolio_id');

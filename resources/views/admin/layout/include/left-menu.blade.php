@@ -14,18 +14,18 @@
         <div class="nano-content">
             <nav id="menu" class="nav-main" role="navigation">
                 <ul class="nav nav-main">
-                    <li class="nav-parent">
-                        <a class="bg-primary">
+                    <li class="{{request()->is('*') ? 'nav-parent nav-active nav-expanded bg-primary' : ''}}">
+                        <a class="">
                             <i class="fa fa-tasks" aria-hidden="true"></i>
                             <span >Manage Event</span>
                         </a>
                         <ul class="nav nav-children">
-                            <li class="">
+                            <li class=" {{request()->is('form') ? 'nav-active' : ''}}">
                                 <a href="/form">
                                     Create Event
                                 </a>
                             </li>
-                            <li class="">
+                            <li class="{{request()->is('table') ? 'nav-active' : ''}}">
                                 <a href="/table">
                                     List Event
                                 </a>

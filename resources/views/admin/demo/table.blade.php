@@ -42,7 +42,7 @@
                                 <select id="company" class="form-control" name="portfolio_id" required="">
                                     <option value="0" selected disabled>--All--</option>
                                     @foreach($portfolios as $portfolio)
-                                        <option value="{{$portfolio->id}}" {{isset($portfolioHasQuery) && $portfolio->id==$portfolioHasQuery  ? 'selected':""}}>{{$portfolio->name}}</option>
+                                        <option value="{{$portfolio->id}}" {{isset($portfolioHasQuery) && $portfolio->id == $portfolioHasQuery? 'selected' : ''}}>{{$portfolio->name}}</option>
                                     @endforeach
                                 </select>
                                 <label class="error" for="company"></label>
@@ -107,6 +107,7 @@
                             <th>End Date</th>
                             <th>Portfolio</th>
                             <th>Ticket Price</th>
+                            <th>Thumbnail</th>
                             <th>Status</th>
                         </tr>
                         </thead>
@@ -119,11 +120,12 @@
                                 <td>{{date("d/m/Y", strtotime($item['startDate']))}}</td>
                                 <td>{{date("d/m/Y", strtotime($item['endDate']))}}</td>
                                 <td>
-                                    @foreach($portfolios as $portfolio)
-                                        {{$item->portfolio_id==$portfolio->id?$portfolio->name:""}}
-                                    @endforeach
+                                    {{$item->portfolio->name}}
                                 </td>
                                 <td>{{number_format($item['ticketPrice'])}}</td>
+                                <td>
+                                    <img style="width: 30%" src="{{$item->FirstThumbnail}}" alt="">
+                                </td>
                                 <td>
                                 @switch($item['status'])
                                         @case(1)
@@ -150,77 +152,18 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="row datatables-footer">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="dataTables_info" id="datatable-editable_info" role="status" aria-live="polite">
-                            Showing {{($items->currentPage() -1)* $limit + 1}} to {{($items->currentPage() -1)* $limit + $limit }} of {{$totalItem->count()}} item, total page {{$items->lastPage()}}
-                        </div>
-                    </div><div class="col-sm-12 col-md-6">
-                        <div class="dataTables_paginate paging_bs_normal" id="datatable-editable_paginate">
-                            @php
-                                $link_limit = 7;
-                            @endphp
-                            @if($items->lastPage() >1)
-                                <ul class="pagination">
-{{--                                    chỉ hiển thị khi lớn hơn 1--}}
-                                    @if($items->currentPage()>1)
-                                        <li>
-                                            <a href="{{$items->url(1)}}" class="page-link">
-                                                First
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{$items->url($items->currentPage()-1)}}" class="page-link">
-                                        <span class="fa fa-chevron-left">
-                                        </span>
-                                            </a>
-                                        </li>
-                                    @endif
-                                    @for($i = 1;$i<= $items->lastPage(); $i++ )
-                                        @php
-                                            if(isset($link_limit) && isset($items)){
-                                                $half_total_links = floor($link_limit / 2);
-                                                $from = $items->currentPage() - $half_total_links;
-                                                $to = $items->currentPage() + $half_total_links;
-                                                if ($items->currentPage() < $half_total_links) {
-                                                $to += $half_total_links - $items->currentPage();
-                                                }
-                                                if ($items->lastPage() - $items->currentPage() < $half_total_links) {
-                                                $from -= $half_total_links - ($items->lastPage() - $items->currentPage()) - 1;
-                                                }
-                                            }
-                                        @endphp
-                                        @if ($from < $i && $i<$to)
-                                            <li class="{{$items->currentPage() ==$i ? 'active' : ''}}">
-                                                <a href="{{$items->url($i)}}" class="page-link">{{$i}}</a>
-                                            </li>
-                                        @endif
-                                    @endfor
-{{--                                    chỉ hiển thị khi currentPage < lastPage--}}
-                                    @if($items->currentPage() < $items->lastPage())
-                                        <li>
-                                            <a href="{{ $items->url($items->currentPage() + 1) }}" class="page-link">
-                                        <span class="fa fa-chevron-right">
-                                        </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ $items->url($items->lastPage()) }}" class="page-link">
-                                                Last
-                                            </a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+                @include('admin.layout.include.paginate')
+{{--                Start facebook For Developers, tạo bình luận--}}
+                <div id="fb-root"></div>
+                <div class="fb-comments" data-href="https://developers.facebook.com/docs/plugins/comments#configurator" data-width="" data-numposts="5"></div>
+{{--                End facebook For Developers, tạo bình luận--}}
             </div>
         </section>
     </div>
 @endsection
 
 @section('script')
+    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0" nonce="1NFmAnm6"></script>
     <script>
         document.forms['searchForm']['category'].onchange = function (){
             document.forms['searchForm'].submit();

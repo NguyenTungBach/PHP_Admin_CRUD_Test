@@ -65,6 +65,15 @@
                                         <h4>{{number_format($item['ticketPrice'])}}</h4>
                                     </div>
                                     <div class="col-md-12 mb-lg">
+                                        <label>Thumbnail:</label>
+                                        <h4>
+                                            @foreach($item->ArrayThumbnail as $thumb)
+                                                <img style="width: 30%; margin-right: 10px" src="{{$thumb}}" alt="">
+                                            @endforeach
+                                        </h4>
+                                    </div>
+
+                                    <div class="col-md-12 mb-lg">
                                         <label>Status :</label>
                                     @switch($item['status'])
                                         @case(1)

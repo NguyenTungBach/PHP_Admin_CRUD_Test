@@ -117,6 +117,18 @@
                         </div>
                     </div>
                     <div class="row form-group">
+                        <div class="col-lg-12">
+                            <label>Thumbnail</label>
+                            <div id="preview-img" >
+                            </div>
+                            <input type="hidden" class="form-control" name="thumbnail" placeholder="Link Thumbnail">
+                            <button type="button" id="upload_widget" class="cloudinary-button btn btn-info btn-fill">Upload files</button>
+                            @error('thumbnail')
+                                <label for="thumbnail" class="error">{{$message}}</label>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="row form-group">
                         <div class="col-lg-3">
                             <label>Status</label>
                             <select class="form-control" name="status">
@@ -149,8 +161,7 @@
                 if (!error && result && result.event === "success") {
                     console.log('Done! Here is the image info: ', result.info.secure_url);
                     document.forms['register-form']['thumbnail'].value += result.info.secure_url + ',';
-
-                    document.getElementById('preview-img').innerHTML += `<img src="${result.info.secure_url}" class="img-thumbnail img-200px">`;
+                    document.getElementById('preview-img').innerHTML += `<img src="${result.info.secure_url}" style="width: 200px" class="mr-sm">`;
                 }
             }
         )
