@@ -119,7 +119,7 @@
                     <div class="row form-group">
                         <div class="col-lg-12">
                             <label>Thumbnail</label>
-                            <div id="preview-img" >
+                            <div id="preview-img" class="row mt-lg pt-lg">
                             </div>
                             <input type="hidden" class="form-control" name="thumbnail" placeholder="Link Thumbnail">
                             <button type="button" id="upload_widget" class="cloudinary-button btn btn-info btn-fill">Upload files</button>
@@ -161,7 +161,25 @@
                 if (!error && result && result.event === "success") {
                     console.log('Done! Here is the image info: ', result.info.secure_url);
                     document.forms['register-form']['thumbnail'].value += result.info.secure_url + ',';
-                    document.getElementById('preview-img').innerHTML += `<img src="${result.info.secure_url}" style="width: 200px" class="mr-sm">`;
+                    document.getElementById('preview-img').innerHTML +=
+                        `<div class="col-md-3">
+							<section class="panel">
+								<header class="panel-heading">
+									<div class="panel-actions">
+										<a href="#" class="fa fa-caret-down"></a>
+										<a href="#" class="fa fa-times"></a>
+									</div>
+									<h2 class="panel-title">Single Item</h2>
+								</header>
+								<div class="panel-body">
+									<div class="owl-carousel owl-theme owl-carousel-init" data-plugin-carousel="" data-plugin-options="{ &quot;items&quot;: 1, &quot;autoHeight&quot;: true }" style="display: block; opacity: 1;">
+										<div class="owl-wrapper-outer autoHeight" style="height: 232px;"><div class="owl-wrapper" style="width: 1392px; left: 0px; display: block; transition: all 200ms ease 0s; transform: translate3d(0px, 0px, 0px);"><div class="owl-item" style="width: 232px;"><div class="item">
+											<img alt="" class="img-responsive" src="${result.info.secure_url}">
+										</div>
+                                    </div>
+                                </div>
+							</section>
+						</div>`;
                 }
             }
         )
