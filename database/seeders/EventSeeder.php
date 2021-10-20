@@ -15,7 +15,7 @@ class EventSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+//        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         DB::table('events')->truncate();
         DB::table('events')->insert([
             [
@@ -74,6 +74,6 @@ class EventSeeder extends Seeder
                 'status' => 0,
             ],
         ]);
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+//        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
