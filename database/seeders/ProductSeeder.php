@@ -15,7 +15,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+//        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         DB::table('products')->truncate();
         DB::table('products')->insert([
             [
@@ -99,6 +99,6 @@ class ProductSeeder extends Seeder
                 'update_at' => Carbon::now(),
             ],
         ]);
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+//        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

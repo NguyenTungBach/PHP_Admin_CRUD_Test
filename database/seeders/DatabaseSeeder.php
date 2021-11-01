@@ -18,11 +18,11 @@ class DatabaseSeeder extends Seeder
     {
 //        DB::table('events')->delete();
 //        Product::factory()->count(10)->create();
-        Event::factory()->count(20)->create();
+//        Event::factory()->count(20)->create();
         $this->call([
             ProductSeeder::class,
             PortfoliosSeeder::class,
-//            EventSeeder::class,
+            EventSeeder::class,
         ]);
     }
 }
