@@ -33,6 +33,12 @@
                         <strong>{{ session('success') }}</strong>
                     </div>
                 @endif
+                    @if(session('fail'))
+                        <div class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <strong>{{ session('fail') }}</strong>
+                        </div>
+                    @endif
                 <form action="/search" method="get" name ='searchForm'>
                     @csrf
                     <div class="row">
@@ -100,6 +106,7 @@
                     <table class="table mb-none">
                         <thead>
                         <tr>
+                            <th><input type="checkbox" value="" name="selected-all"></th>
                             <th>STT</th>
                             <th>Event Name</th>
                             <th>Band Names</th>
@@ -114,6 +121,7 @@
                         <tbody>
                         @foreach($items as $item)
                             <tr>
+                                <th><input type="checkbox" value="{{$item['id']}}" name="selected-item" class="selected-item"></th>
                                 <td>{{$item['id']}}</td>
                                 <td>{{$item['eventName']}}</td>
                                 <td >{{$item['bandNames']}}</td>
@@ -152,6 +160,12 @@
                         </tbody>
                     </table>
                 </div>
+                <div>
+                    <button type="button" id="itemCheck" class="btn btn-danger btn-fill">0 Select</button>
+{{--                    <input type="text" class="form-control" name="arrayIdDelete">--}}
+                    <a href="/deleteList?arrayIdDelete=" id="DeleteByCheckHref"><button class="btn btn-info btn-fill">Delete By Check</button></a>
+                    <a href="/updateList?arrayIdUpdate=" id="UpdateByCheckHref"><button class="btn btn btn-warning btn-fill">Update By Check</button></a>
+                </div>
                 @include('admin.layout.include.paginate')
 {{--                Start facebook For Developers, tạo bình luận--}}
                 <div id="fb-root"></div>
@@ -176,10 +190,45 @@
         })();
     </script>
     <!--End of Tawk.to Script-->
+
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-6170425ce6ce4b7a"></script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v12.0" nonce="1NFmAnm6"></script>
     <script>
-        document.forms['searchForm']['category'].onchange = function (){
-            document.forms['searchForm'].submit();
-        };
+
+        const selectedItem = $('.selected-item');
+        var array= [];
+        var dem = 0;
+        $('input[name="selected-all"]').on('click',function (){
+            array= [];
+            selectedItem.prop('checked', this.checked); // cho tất cả đều được check như selected-all
+            $('input[name=selected-item]:checked').each(function() {
+                array.push($(this).val());
+            })
+            dem = array.length;
+            $('#itemCheck').text(dem +" Select");
+        });
+
+        selectedItem.on("click",function () {
+            array= [];
+            $('input[name=selected-item]:checked').each(function() {
+                array.push($(this).val());
+            })
+            dem = array.length;
+            $('#itemCheck').text(dem +" Select");
+        });
+
+        $(document).on("click","#DeleteByCheckHref",function () {
+            var hrefDelete = $('#DeleteByCheckHref').attr('href');
+            $('#DeleteByCheckHref').attr('href',hrefDelete + array);
+        });
+
+        $(document).on("click","#UpdateByCheckHref",function () {
+            var hrefUpdate = $('#UpdateByCheckHref').attr('href');
+            $('#UpdateByCheckHref').attr('href',hrefUpdate + array);
+        });
+
     </script>
 @endsection

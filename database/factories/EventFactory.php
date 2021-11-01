@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EventFactory extends Factory
@@ -30,6 +31,7 @@ class EventFactory extends Factory
             'portfolio_id' => rand(1, 5),
             'ticketPrice' => rand(100000, 1000000),
             'status' => rand(1, 3),
+            'created_at' => Carbon::now(),
         ];
     }
 }

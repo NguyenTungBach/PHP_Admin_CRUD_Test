@@ -2,10 +2,14 @@
 
 
 namespace App\Http\Controllers;
+use App\Http\Requests\ContactRequest;
 use App\Http\Requests\EventRequest;
+use App\Mail\Contact;
 use App\Models\Event;
 use App\Models\Portfolio;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class LayoutController extends Controller
 {
@@ -24,6 +28,62 @@ class LayoutController extends Controller
         $event->endDate = date("Y-m-d", strtotime($request->get('endDate')));
         $event->save();
         return redirect('/table')->with('success',"Create new Event name = $eventName, Success");
+    }
+
+    public function getDeleteList(Request $request){
+        $arrayIdDelete = explode(',',$request->get('arrayIdDelete'));
+        $items = Event::whereIn('id',$arrayIdDelete)->get();
+//        $data =[
+//            'id' =>Event::where('id','=',$id)->value('id'),
+//            'eventName' =>Event::where('id','=',$id)->value('eventName'),
+//            'bandNames' =>Event::where('id','=',$id)->value('bandNames')
+//        ];
+//        return view('admin.demo.delete',$data);
+        return view('admin.demo.deleteList',['items' => $items]);
+    }
+
+    public function processDeleteList(Request $request){
+        $arrayIdDelete = explode(',',$request->get('arrayIdDelete'));
+        unset( $arrayIdDelete[count($arrayIdDelete)-1]);
+        $arrayIdDeleteString = collect($arrayIdDelete)->implode(',');
+        try {
+            Event::whereIn('id',$arrayIdDelete)->delete();
+            return redirect('/table')->with('success',"Delete hard all id = $arrayIdDeleteString , Success");
+        } catch (\Exception $e){
+            return redirect('/table')->with('fail',"Delete hard all id = $arrayIdDeleteString , Fail");
+        }
+    }
+
+    public function getUpdateList(Request $request){
+        $arrayIdUpdate = explode(',',$request->get('arrayIdUpdate'));
+        $items = Event::whereIn('id',$arrayIdUpdate)->get();
+        return view('admin.demo.updateList',['items' => $items]);
+    }
+
+    public function processUpdateList(Request $request){
+        $request->validate(
+          [
+              'ticketPrice'=> 'required|min:1'
+          ],
+          [
+            'ticketPrice.required'=> 'Please Enter Price',
+            'ticketPrice.min'=> 'Price can not be <= 0'
+          ],
+        );
+        $request->request->remove('_token');
+        $arrayIdUpdate = explode(',',$request->get('arrayIdUpdate'));
+        unset( $arrayIdUpdate[count($arrayIdUpdate)-1]);
+        $arrayIdUpdateString = collect($arrayIdUpdate)->implode(',');
+        try {
+            $event = Event::whereIn('id',$arrayIdUpdate);
+            $request->request->remove('id'); // xóa id để cho request all ở đây chỉ còn mỗi Price thôi nếu để id sẽ bị update cùng sinh ra lỗi
+            $request->request->remove('arrayIdUpdate'); // xóa id để cho request all ở đây chỉ còn mỗi Price thôi nếu để id sẽ bị update cùng sinh ra lỗi
+            $request->request->add(['updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')]);
+            $event->update($request->all());
+            return redirect('/table')->with('success',"Update price all id = $arrayIdUpdateString , Success");
+        } catch (\Exception $e){
+            return redirect('/table')->with('fail',"Update price all id = $arrayIdUpdateString , fail");
+        }
     }
 
     public function getTable(){
@@ -127,4 +187,17 @@ class LayoutController extends Controller
         $event->delete();
         return redirect('/table')->with('success',"Delete hard with ID= $id, Success");
     }
+
+    public function getContact(){
+        return view('admin.demo.contact');
+    }
+
+    public function processContact(ContactRequest $request){
+        $data = $request->all();
+        $request->request->remove('_token');
+//        $nameEmail = $request->get('nameEmail');
+        Mail::to("bachntth2010055@fpt.edu.vn")->send(new Contact($data));
+        return redirect('/contact')->with('success',"Send Contact, Success");
+    }
+
 }

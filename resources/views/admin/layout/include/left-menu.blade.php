@@ -30,6 +30,11 @@
                                     List Event
                                 </a>
                             </li>
+                            <li class="{{request()->is('contact') ? 'nav-active' : ''}}">
+                                <a href="/contact">
+                                    Contact Event
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

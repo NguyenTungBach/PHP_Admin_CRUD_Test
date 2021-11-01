@@ -23,6 +23,8 @@ class CreateEventsTable extends Migration
             $table->unsignedBigInteger('portfolio_id');
             $table->double('ticketPrice');
             $table->integer('status');
+            $table->timestamps();
+            $table->date('deleted_at')->nullable();
         });
     }
 
